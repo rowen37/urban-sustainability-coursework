@@ -1,0 +1,11 @@
+# data files are too large for GitHub (100 MB hard limit)
+*.tif
+*.tiff
+dem-pa/
+hand-pa/
+cir-naip/
+
+# macOS / Jupyter cruft
+.DS_Store
+.ipynb_checkpoints/
+__pycache__/

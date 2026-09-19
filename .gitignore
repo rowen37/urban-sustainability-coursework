@@ -1,6 +1,7 @@
 # data files are too large for GitHub (100 MB hard limit)
 *.tif
 *.tiff
+*.zip
 dem-pa/
 hand-pa/
 cir-naip/

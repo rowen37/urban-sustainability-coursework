@@ -40,12 +40,36 @@ Estimates potential inundation depth across Pennsylvania from the USGS 1-arc-sec
 | `lab4-urban-flood-mapping/Lab4_Report_Qiwen_Bian.pdf` | Two-page lab report |
 | `lab4-urban-flood-mapping/PA_inundation_map.png` | Statewide inundation map |
 
+## Lab 5 — GPU Shade Mapping (PyCUDA)
+
+Simulates how the shadow pattern of a Philadelphia block evolves hour by hour (8:00–17:00) with a
+per-pixel ray-tracing CUDA kernel (Colab T4 GPU):
+
+1. Download the course DSM tile `row11-col17.tif` (1 m, EPSG:2272 PA StatePlane ft) from the Lab 05 Drive link.
+2. For every pixel, trace a ray toward the sun (azimuth from north, anti-clockwise, up to 2000 m); any higher surface along the ray shades the pixel.
+3. Hourly solar positions for the tile centre (40.0213° N, 75.0830° W) from the NOAA solar calculator.
+4. Render one shadow map per hour and combine them into `shadow_analysis.gif` (0.5 s per frame).
+
+**Result:**
+
+![Hourly shadow distribution, 8:00–17:00](lab5-gpu-shadow-mapping/shadow_analysis.gif)
+
+| File | Description |
+|---|---|
+| `lab5-gpu-shadow-mapping/lab5_shadow_pycuda_Qiwen_Bian.ipynb` | Self-contained Colab notebook (outputs cleared) |
+| `lab5-gpu-shadow-mapping/lab05.ipynb` | Same notebook, named `lab05` for the "Open in Colab" entry point |
+| `lab5-gpu-shadow-mapping/shadow_analysis.gif` | Hourly shadow maps 8:00–17:00 |
+
 ## Reproduce
 
 ```bash
 conda env create -f env.yml && conda activate geospatial   # python 3.10 + rasterio/pysheds
 jupyter lab lab3-raster-data-manipulation/ lab4-urban-flood-mapping/
 ```
+
+Lab 5 needs CUDA and runs in Colab instead (T4 GPU runtime): open
+[`lab5-gpu-shadow-mapping/lab05.ipynb`](https://colab.research.google.com/github/rowen37/urban-sustainability-coursework/blob/main/lab5-gpu-shadow-mapping/lab05.ipynb)
+and run all cells — the notebook installs PyCUDA and downloads the DSM itself; the run is deterministic.
 
 Lab 3 NAIP tiles (~5.8 GB), the Chicago mosaic (~24 GB) and Lab 4 DEM tiles (~1.5 GB) are
 **not** committed (GitHub's 100 MB per-file limit); the notebooks download them automatically

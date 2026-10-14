@@ -60,6 +60,29 @@ per-pixel ray-tracing CUDA kernel (Colab T4 GPU):
 | `lab5-gpu-shadow-mapping/lab05.ipynb` | Same notebook, named `lab05` for the "Open in Colab" entry point |
 | `lab5-gpu-shadow-mapping/shadow_analysis.gif` | Hourly shadow maps 8:00–17:00 |
 
+## Lab 6 — EuroSAT Land-Use Classification (PyTorch CNN)
+
+Designs, trains and ablates PyTorch CNNs that classify EuroSAT RGB patches (Sentinel-2, 64×64,
+10 land-use classes) on a Colab T4 GPU, one change at a time against a fixed split:
+
+1. Download EuroSAT (27,000 images); stratified 70/15/15 train/val/test split; normalization
+   statistics estimated on the training split only.
+2. Baseline CNN as the reference point (92.6% val).
+3. Architecture upgrade — BatchNorm, residual blocks, global average pooling (97.0% val).
+4. Fine-tune an ImageNet-pretrained ResNet-18 with a two-speed learning rate (97.5% val).
+5. Controlled ablations: augmentation / weight decay / label smoothing — augmentation trails at
+   this epoch budget because the augmented runs have not converged yet (train acc still ~97%).
+6. Best model evaluated once on the test set: **97.8%**, plus confusion matrix and error analysis
+   (PermanentCrop and AnnualCrop stay hardest — their distinguishing cue is the growth cycle,
+   which a single RGB patch cannot show).
+
+**Result:**
+
+| File | Description |
+|---|---|
+| `lab6-eurosat-cnn/lab6_eurosat_pytorch_Qiwen_Bian.ipynb` | Self-contained Colab notebook with outputs |
+| `lab6-eurosat-cnn/lab06.ipynb` | Same notebook, named `lab06` for the "Open in Colab" entry point |
+
 ## Reproduce
 
 ```bash
@@ -70,6 +93,11 @@ jupyter lab lab3-raster-data-manipulation/ lab4-urban-flood-mapping/
 Lab 5 needs CUDA and runs in Colab instead (T4 GPU runtime): open
 [`lab5-gpu-shadow-mapping/lab05.ipynb`](https://colab.research.google.com/github/rowen37/urban-sustainability-coursework/blob/main/lab5-gpu-shadow-mapping/lab05.ipynb)
 and run all cells — the notebook installs PyCUDA and downloads the DSM itself; the run is deterministic.
+
+Lab 6 needs a GPU as well (T4): open
+[`lab6-eurosat-cnn/lab06.ipynb`](https://colab.research.google.com/github/rowen37/urban-sustainability-coursework/blob/main/lab6-eurosat-cnn/lab06.ipynb)
+and run all cells (~1.5 h) — the notebook downloads EuroSAT itself; single-run accuracy varies
+within ~±0.5% (cuDNN non-determinism despite the fixed seed).
 
 Lab 3 NAIP tiles (~5.8 GB), the Chicago mosaic (~24 GB) and Lab 4 DEM tiles (~1.5 GB) are
 **not** committed (GitHub's 100 MB per-file limit); the notebooks download them automatically
